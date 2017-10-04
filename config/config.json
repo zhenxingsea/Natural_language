@@ -1,0 +1,8 @@
+{
+	"database" 	: {
+		"url" 	: "mongodb://language:language@localhost/natural_language",
+		"options" :{
+			"useMongoClient" : true
+		}
+	}
+}

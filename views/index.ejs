@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+    <title><%= title %></title>
+    <script src="javascripts/jquery-1.10.2.js"></script>
+    <script src="javascripts/echarts.js"></script>
+</head>
+<body>
+    <div id="main" style="width: 100%;height:700px;"></div>
+    <script type="text/javascript">
+	    function init(words,contacts,categories) {
+	    	var myChart = echarts.init(document.getElementById('main'));
+	        option = {
+			    backgroundColor: '#174B78',
+			    grid:{
+			            x:0,
+			            x2:0,
+			            y:0,
+			            y2:0
+			        }, 
+			    title: {
+			        text: "",
+			        subtext: "",
+			        textStyle: {
+			            color: "#fff",
+			            fontSize: 18
+			        },
+			        top: "top",
+			        left: "center"
+			    },
+			    tooltip: {},
+			    legend: {},
+			    toolbox: {
+			        show: false,
+			        feature: {
+			            dataView: {
+			                show: true,
+			                readOnly: true
+			            },
+			            restore: {
+			                show: true
+			            },
+			            saveAsImage: {
+			                show: true
+			            }
+			        }
+			    },
+			    animationDuration: 3000,
+			    animationEasingUpdate: 'quinticInOut',
+			    series: [{
+			        name: '自然语然分析',
+			        type: 'graph',
+			        layout: 'force',
+
+			        force: {
+			           // initLayout: 'circular',
+			            repulsion: 180,
+			            gravity: 0.2,
+			            edgeLength: 90
+			        },
+
+			        data: words,
+			        links: contacts,
+			        categories: categories,
+
+			        focusNodeAdjacency: true,
+			        roam: true,
+			        label: {
+			            normal: {
+
+			                show: true,
+			                position: 'top',
+			                textStyle: {
+			                     fontSize: 14
+			                }
+			            }
+			        },
+			        lineStyle: {
+			            normal: {
+			                color: 'source',
+			                curveness: 0
+			                //type: "solid"
+			            }
+			        }
+			    }]
+			};
+	        myChart.setOption(option);
+	    }
+
+	    $.ajax({
+	        url: "/api/showView",
+	        type : "post",
+	        data : {},
+	        success : function(data){
+				console.log(data);
+				if(data.code == "succeed"){
+					init(data.words,data.contacts,data.categories);
+					// init([],[],[]);
+				}else{
+					alert("连接服务器失败！");
+				}
+	        },
+	        dataType : "json",
+	        error : function(data){
+	          	console.log(data);
+	          	alert("连接服务器失败！");
+	        }
+	    });
+    </script>
+</body>
+</html>
